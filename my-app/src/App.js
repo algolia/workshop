@@ -8,22 +8,12 @@ import {
   RefinementList,
   Pagination,
   Highlight,
-  connectHitInsights,
 } from 'react-instantsearch-dom';
 import './App.css';
 
 const appId = 'N66N7FOPGI';
 const apiKey = '41bc8ab6cb33007df5f2e3e41796cfa9';
 const indexName = 'demo_ecommerce';
-
-// Initialize the Insights client.
-window.aa('init', {
-  appId,
-  apiKey,
-});
-
-// Set a global userToken
-window.aa('setUserToken', 'user-1');
 
 const searchClient = algoliasearch(appId, apiKey);
 
@@ -60,7 +50,7 @@ function App() {
                   placeholder: '',
                 }}
               />
-              <Hits hitComponent={HitWithInsights} />
+              <Hits hitComponent={Hit} />
 
               <div className="pagination">
                 <Pagination />
@@ -73,15 +63,9 @@ function App() {
   );
 }
 
-function Hit({ hit, insights }) {
+function Hit({ hit }) {
   return (
-    <article
-      onClick={() =>
-        insights('clickedObjectIDsAfterSearch', {
-          eventName: 'Product Clicked',
-        })
-      }
-    >
+    <article>
       <img src={hit.image} alt={hit.name} />
       <h1>
         <Highlight attribute="name" hit={hit} />
@@ -92,7 +76,5 @@ function Hit({ hit, insights }) {
     </article>
   );
 }
-
-const HitWithInsights = connectHitInsights(window.aa)(Hit);
 
 export default App;
