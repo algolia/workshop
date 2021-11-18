@@ -28,18 +28,11 @@ Exemple of a single `object`, representing an e-commerce product:
 
 As you can see, this is just like plain, old JSON :)
 
-### Pick your dataset
-
-Choose one of the provided dataset:
-
-- [Blog](./datasets/blog.json)
-- [E-commerce](./datasets/ecommerce.json)
-
 ### Create your index
 
 **Upload your data**
 
-You will now create a new `index` from your dataset.
+You will now create a new `index` from [this dataset](./datasets/ecommerce.json).
 There are two main ways you can achieve this:
 
 - On the [Algolia Dashboard](https://www.algolia.com/dashboard) by just uploading your JSON file
@@ -51,22 +44,19 @@ You can follow [this tutorial](https://www.algolia.com/doc/guides/sending-and-ma
 
 **Configure your index**
 
-An index configuration 
+An index configuration is a set of settings that define how your index will behave.
 
-1. Ranking
+1. Ranking: [The 8 Ranking Criteria](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/)
 
-[The 8 Ranking Criteria](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/)
+2. Relevance: [Defining Relevance](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/defining-relevance/)
 
-2. Relevance
+1. Faceting: [Faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and [How to Declare Attributes for Faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/how-to/declaring-attributes-for-faceting/#using-the-dashboard)
 
-[Defining Relevance](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/defining-relevance/)
+The goal for this workshop is to configure our index with:
+- One custom ranking criteria (`popularity`): https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/how-to/configure-custom-ranking/#using-the-dashboard
+- Two `attributesForFaceting` (`brand` and `categories`): https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/how-to/declaring-attributes-for-faceting/#using-the-dashboard
 
-1. Faceting
-
-[Faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/)
-[How to Declare Attributes for Faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/how-to/declaring-attributes-for-faceting/#using-the-dashboard)
-
-Feels free to play around and explore your newly created index from the Algolia Dashboard!
+Feels free to play around and explore your newly created index from the Algolia Dashboard when you are done!
 
 **Links**
 - [What Is Algolia?](https://www.algolia.com/doc/guides/getting-started/what-is-algolia/)
@@ -153,7 +143,6 @@ Initialize the Algolia Insights client:
 
 [App.js](./my-app/src/App.js)
 ```javascript
-
 // Initialize the Insights client.
 window.aa('init', {
   appId: 'YOUR_APPLICATION_ID',
@@ -161,15 +150,14 @@ window.aa('init', {
 });
 
 // Set a global userToken
-aa('setUserToken', 'user-1');
+window.aa('setUserToken', 'user-1');
 ```
 
 Configure your React application to pass the needed context to the insights client:
 
 [App.js](./my-app/src/App.js)
-```diff
--- <Configure />
-++ <Configure clickAnalytics />
+```javascript
+<Configure clickAnalytics />
 ```
 
 **2. Send your first event.**
@@ -187,13 +175,27 @@ import { connectHitInsights } from 'react-instantsearch-dom';
 ```
 
 2 - "Connect" the `Hit` component (injecting the Insights client)
+
+[App.js](./my-app/src/App.js)
 ```javascript
 const HitWithInsights = connectHitInsights(window.aa)(Hit);
 ```
 
 3 - Replace the `Hit` component by the `HitWithInsights` one
-```javascript
 
+[App.js](./my-app/src/App.js)
+```javascript
+<Hits hitComponent={HitWithInsights} />
+```
+
+Second step, we need to pass the `objectID` of the clicked item to the Insights client.
+
+```javascript
+onClick={() =>
+    insights('clickedObjectIDsAfterSearch', {
+        eventName: 'Product Clicked'
+    })
+}
 ```
 
 
@@ -208,6 +210,9 @@ You can check and debug your event sending on the [Events hub](https://www.algol
 ## 4. Personalize the search results using Analytics data
 
 As the Personalization feature require a reasonable number of events to be sent, this part will be presented.
+
+- Intro video: https://www.youtube.com/watch?v=ymd7VL233TQ&t=139s
+- Dashboard showcase
 
 **Links**
 - [What Is Personalization?](https://www.algolia.com/doc/guides/personalization/what-is-personalization/)
