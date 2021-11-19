@@ -10,7 +10,7 @@
 Algolia will search through any set of data, as long as it’s structured. This is what we call an `index`.
 The items are broken down into individual records (`objects`), with each object containing a set of fields (`attributes`).
 
-Exemple of a single `object`, representing an e-commerce product:
+Example of a single `object`, representing an e-commerce product:
 ```json
 {
     "objectID": 1,
@@ -91,7 +91,7 @@ The CLI will help you quickly create a new React InstantSearch, it will ask you 
 npx create-instantsearch-app my-app
 ```
 
-**IMPORTANT: Select "React InstantSearch"  when asked for the tenplate to use.**
+**IMPORTANT: Select "React InstantSearch"  when asked for the template to use.**
 
 When the CLI is done bootstrapping your InstantSearch app, you can start it to check that everything is okay:
 
